@@ -2,28 +2,22 @@ from typing import Dict, List
 
 
 def read_file() -> List[str]:
-    results = list()
-
     with open("./sample.txt", "r") as f:
-        for line in f:
-            results.append(line.strip())
-
-        return results
+        return [line.strip() for line in f]
 
 
 def get_anagrams() -> Dict[int, List[str]]:
     words = read_file()
-    results = dict(list())
+    results: Dict[tuple, List[str]] = {}
+
     for word in words:
-        tuple_word = tuple(sorted(list(word)))
-        results[tuple_word] = [word] if tuple_word not in results.keys() else results[tuple_word] + [word]
+        key_word = tuple(sorted(word))
+        results.setdefault(key_word, list()).append(word)
 
     return results
 
 
 if __name__ == "__main__":
     anagrams = get_anagrams()
-    for key, value in anagrams.items():
-        for word in value:
-            print(word, end=' ')
-        print()
+    for list_value in anagrams.values():
+        print(' '.join(list_value))
